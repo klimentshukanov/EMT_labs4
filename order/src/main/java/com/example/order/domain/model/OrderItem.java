@@ -1,6 +1,6 @@
 package com.example.order.domain.model;
 
-import com.example.product.domain.model.ProductId;
+import com.example.order.domain.valueobjects.Product;
 import com.example.sharedkernel.domain.base.AbstractEntity;
 import com.example.sharedkernel.domain.base.DomainObjectId;
 import com.example.sharedkernel.domain.financial.Money;
@@ -18,20 +18,20 @@ public class OrderItem extends AbstractEntity<DomainObjectId> {
 
     Money itemPrice;
 
+    @Column(length = 1000)
+    Product product;
+
     @Column(name="quantity")
     Integer quantity;
-
-    @AttributeOverride(name = "id", column = @Column(name = "product_id", nullable = false))
-    private ProductId productId;
 
 
     public OrderItem() {
         super(DomainObjectId.randomId(OrderItemId.class));
     }
 
-    public OrderItem(@NonNull ProductId productId, @NonNull Money itemPrice, int qty) {
+    public OrderItem(@NonNull Product product, @NonNull Money itemPrice, int qty) {
         super(DomainObjectId.randomId(OrderItemId.class));
-        this.productId = productId;
+        this.product = product;
         this.itemPrice = itemPrice;
         this.quantity = qty;
     }

@@ -1,19 +1,16 @@
 package com.example.order.domain.model;
 
-import com.example.product.domain.model.Product;
+import com.example.order.domain.valueobjects.Product;
 import com.example.sharedkernel.domain.base.AbstractEntity;
 import com.example.sharedkernel.domain.financial.Currency;
 import com.example.sharedkernel.domain.financial.Money;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="orders")
@@ -30,11 +27,12 @@ public class Order extends AbstractEntity<OrderId> {
     LocalDateTime orderDate;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<OrderItem> orderItemList = new ArrayList<>();
+    private List<OrderItem> orderItemList;
 
     public Order() {
         super(OrderId.randomId(OrderId.class));
         this.orderDate = LocalDateTime.now();
+        this.orderItemList=new ArrayList<>();
     }
 
     public Order(Currency currency) {
@@ -42,6 +40,7 @@ public class Order extends AbstractEntity<OrderId> {
         this.orderDate = LocalDateTime.now();
         this.currency=currency;
         totalPrice=new Money(this.currency, 0.0);
+        this.orderItemList=new ArrayList<>();
     }
 
     public Money total() {
@@ -55,13 +54,13 @@ public class Order extends AbstractEntity<OrderId> {
 
     public OrderItem addItem(@NonNull Product product, int quantity) {
         Objects.requireNonNull(product,"Product is null");
-        var item  = new OrderItem(product.getId(),product.getPrice(),quantity);
+        var item  = new OrderItem(product, product.getPrice(), quantity);
         orderItemList.add(item);
         totalPrice=total();
         return item;
     }
 
-    public void removeItem(@NonNull OrderItemId orderItemId) {
+    public OrderItem removeItem(@NonNull OrderItemId orderItemId) {
         Objects.requireNonNull(orderItemId,"Order Item is null");
         orderItemList.removeIf(v->v.getId().equals(orderItemId));
         totalPrice=total();

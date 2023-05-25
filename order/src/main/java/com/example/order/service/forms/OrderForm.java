@@ -1,8 +1,11 @@
 package com.example.order.service.forms;
 
 
+import com.example.order.domain.model.OrderItem;
 import com.example.sharedkernel.domain.financial.Currency;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderForm {
 
     @NotNull
@@ -18,6 +23,6 @@ public class OrderForm {
 
     @Valid
     @NotEmpty
-    private List<OrderItemForm> items = new ArrayList<>();
+    private List<OrderItem> items = new ArrayList<>();
 }
 

@@ -10,11 +10,14 @@
         <module name="EMT_labs4" />
         <module name="shared-kernel" />
         <module name="product" />
-        <module name="user" />
-        <module name="review" />
         <module name="order" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="product" target="17" />
+      <module name="review" target="17" />
+      <module name="user" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

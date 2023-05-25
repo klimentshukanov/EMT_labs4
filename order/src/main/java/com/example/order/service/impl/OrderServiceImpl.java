@@ -25,7 +25,6 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    //private final DomainEventPublisher domainEventPublisher;
     private final Validator validator;
 
     @Override
@@ -36,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
             throw new ConstraintViolationException("The order form is not valid", constraintViolations);
         }
         var newOrder = orderRepository.saveAndFlush(toDomainObject(orderForm));
-        //newOrder.getOrderItemList().forEach(item->domainEventPublisher.publish(new OrderItemCreated(item.getProductId().getId(),item.getQuantity())));
         return newOrder.getId();
     }
 
@@ -55,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
         order.addItem(orderItemForm.getProduct(),orderItemForm.getQuantity());
         orderRepository.saveAndFlush(order);
-        //domainEventPublisher.publish(new OrderItemCreated(orderItemForm.getProduct().getId().getId(),orderItemForm.getQuantity()));
     }
 
     @Override
