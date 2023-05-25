@@ -4,6 +4,7 @@ import com.example.order.domain.exceptions.OrderNotFoundException;
 import com.example.order.domain.model.Order;
 import com.example.order.domain.model.OrderId;
 import com.example.order.domain.model.OrderItem;
+import com.example.order.domain.model.OrderItemId;
 import com.example.order.domain.valueobjects.Product;
 import com.example.order.service.OrderService;
 import com.example.order.service.forms.OrderForm;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @SpringBootTest
 class OrderApplicationTests {
@@ -56,14 +58,14 @@ class OrderApplicationTests {
     }
 
 
-
     @Test
-    public void addItemFromOrder()
+    public void addItemToOrder()
     {
         OrderId orderId = createOrder();
         Order order=orderService.findById(orderId).orElseThrow(OrderNotFoundException::new);
-        OrderItem orderItem=order.addItem(new Product("Laptop", 7, new Money(Currency.EUR, 120.0), "Gaming Laptop"), 1);
-        Assertions.assertNotNull(orderItem);
+        order.addItem(new Product("Laptop", 7, new Money(Currency.EUR, 120.0), "Gaming Laptop"), 1);
+
+        Assertions.assertEquals(order.getTotalPrice().getAmount(), 920.0, 0);
 
     }
 
@@ -71,8 +73,14 @@ class OrderApplicationTests {
     public void deleteItemFromOrder()
     {
         OrderId orderId = createOrder();
-
         Order order=orderService.findById(orderId).orElseThrow(OrderNotFoundException::new);
+
+        OrderItem orderItem=order.getOrderItemList().stream().findFirst().orElseThrow(NoSuchElementException::new);
+
+        order.removeItem(orderItem.getId());
+
+        Assertions.assertEquals(order.getTotalPrice().getAmount(), 300.0, 0);
+
     }
 
 }

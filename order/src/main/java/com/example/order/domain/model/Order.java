@@ -2,6 +2,7 @@ package com.example.order.domain.model;
 
 import com.example.order.domain.valueobjects.Product;
 import com.example.sharedkernel.domain.base.AbstractEntity;
+import com.example.sharedkernel.domain.base.DomainObjectId;
 import com.example.sharedkernel.domain.financial.Currency;
 import com.example.sharedkernel.domain.financial.Money;
 import jakarta.persistence.*;
@@ -60,7 +61,7 @@ public class Order extends AbstractEntity<OrderId> {
         return item;
     }
 
-    public OrderItem removeItem(@NonNull OrderItemId orderItemId) {
+    public void removeItem(@NonNull DomainObjectId orderItemId) {
         Objects.requireNonNull(orderItemId,"Order Item is null");
         orderItemList.removeIf(v->v.getId().equals(orderItemId));
         totalPrice=total();
