@@ -41,7 +41,7 @@ public class Money implements ValueObject {
 
     public Money subtract(Money money) {
         if (!currency.equals(money.currency)) {
-            throw new IllegalArgumentException("Cannot add two Money objects with different currencies");
+            throw new IllegalArgumentException("Cannot subtract two Money objects with different currencies");
         }
         return new Money(currency,amount - money.amount);
     }

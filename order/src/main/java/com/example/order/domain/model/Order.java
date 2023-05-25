@@ -22,6 +22,8 @@ public class Order extends AbstractEntity<OrderId> {
 
     Money totalPrice;
 
+    @Enumerated(EnumType.STRING)
+    @Column(insertable=false, updatable=false)
     Currency currency;
 
     @Column(name="order_date")

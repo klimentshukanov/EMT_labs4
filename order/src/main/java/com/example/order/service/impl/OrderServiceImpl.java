@@ -9,11 +9,12 @@ import com.example.order.service.OrderService;
 import com.example.order.service.forms.OrderForm;
 import com.example.order.service.forms.OrderItemForm;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import jakarta.validation.Validator;
 
-import javax.validation.ConstraintViolationException;
-import javax.xml.validation.Validator;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderId placeOrder(OrderForm orderForm) {
-        Objects.requireNonNull(orderForm,"order must not be null.");
+        Objects.requireNonNull(orderForm,"Order must not be null.");
         var constraintViolations = validator.validate(orderForm);
         if (constraintViolations.size()>0) {
             throw new ConstraintViolationException("The order form is not valid", constraintViolations);
