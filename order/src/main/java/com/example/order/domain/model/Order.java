@@ -61,10 +61,14 @@ public class Order extends AbstractEntity<OrderId> {
         return item;
     }
 
-    public void removeItem(@NonNull DomainObjectId orderItemId) {
+    public OrderItem removeItem(@NonNull DomainObjectId orderItemId) {
         Objects.requireNonNull(orderItemId,"Order Item is null");
-        orderItemList.removeIf(v->v.getId().equals(orderItemId));
+        //orderItemList.removeIf(v->v.getId().equals(orderItemId));
+
+        OrderItem removedItem=orderItemList.stream().filter(v->v.getId().equals(orderItemId)).findFirst().orElseThrow();
+        orderItemList.remove(removedItem);
         totalPrice=total();
+        return removedItem;
     }
 
 

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,9 +77,9 @@ class OrderApplicationTests {
         Order order=orderService.findById(orderId).orElseThrow(OrderNotFoundException::new);
 
         OrderItem orderItem=order.getOrderItemList().stream().findFirst().orElseThrow(NoSuchElementException::new);
+        OrderItem removedItem=order.removeItem(orderItem.getId());
 
-        order.removeItem(orderItem.getId());
-
+        Assertions.assertEquals(removedItem, orderItem);
         Assertions.assertEquals(order.getTotalPrice().getAmount(), 300.0, 0);
 
     }
